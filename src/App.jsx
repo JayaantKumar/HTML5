@@ -1,4 +1,4 @@
-import { useState } from "react"; // Import useState
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
@@ -11,8 +11,6 @@ import AddGame from "./pages/admin/AddGame";
 import Footer from "./components/layout/Footer";
 import Seeder from "./components/shared/Seeder";
 import Contact from "./pages/Contact"; 
-
-// Import new Layout components
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
 
@@ -28,15 +26,14 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* Changed bg color to match the site's general feel */}
-      <div className="bg-[#f0f2f5] min-h-screen font-sans flex flex-col">
+      {/* Background matches the new cream theme */}
+      <div className="bg-[#FEFAE0] min-h-screen font-sans flex flex-col">
         
-        {/* New Navigation System */}
         <Navbar toggleSidebar={() => setIsSidebarOpen(true)} />
         <Sidebar isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
 
-        {/* Main Content Area - Added top padding to account for fixed navbar */}
-        <div className="flex-grow pt-24"> 
+        {/* 🔴 FIXED: Removed 'pt-24'. Sticky navbar handles spacing automatically. */}
+        <div className="flex-grow"> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/portfolio" element={<Portfolio />} />
@@ -45,7 +42,6 @@ function App() {
             <Route path="/project/:slug" element={<ProjectDetails />} />
             <Route path="/login" element={<Login />} />
 
-            {/* Admin Routes */}
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/add" element={<ProtectedRoute><AddGame /></ProtectedRoute>} />
           </Routes>

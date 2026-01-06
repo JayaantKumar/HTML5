@@ -1,43 +1,58 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = ({ toggleSidebar }) => {
   return (
-    <nav className="fixed top-0 w-full z-40 bg-[#333333] h-16 shadow-md border-b border-gray-800">
-      <div className="max-w-[1400px] mx-auto px-4 h-full flex justify-between items-center relative">
+    <header className="sticky top-0 z-50 w-full border-b border-secondary bg-[#FEFAE0]/95 backdrop-blur-md">
+      <div className="px-4 md:px-8 xl:px-40 flex h-20 items-center justify-between gap-4">
         
-        {/* Left: Hamburger Menu */}
-        <button 
-          onClick={toggleSidebar}
-          className="p-2 bg-gray-600/50 hover:bg-gray-500 rounded-md text-white transition"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+        {/* Left: Hamburger & Logo */}
+        <div className="flex items-center gap-4 shrink-0">
+          <button 
+            onClick={toggleSidebar}
+            className="flex items-center justify-center p-2 rounded-lg text-contrast hover:bg-primary/20 transition-colors"
+          >
+            <span className="text-2xl">☰</span>
+          </button>
 
-        {/* Center: Orange Logo Badge (Absolute Centered) */}
-        <div className="absolute left-1/2 top-0 transform -translate-x-1/2">
-          <Link to="/" className="block">
-            {/* CSS shape to mimic the orange badge */}
-            <div className="bg-[#f05a28] h-20 w-48 flex items-center justify-center rounded-b-full shadow-lg pt-2 pb-6">
-               <h1 className="text-2xl font-black text-white italic tracking-tighter">
-                 HTML<span className="text-5xl align-middle mx-1">5</span>GAMES
-               </h1>
+          <Link to="/" className="flex items-center gap-3">
+            <div className="size-8 text-primary">
+              <svg className="h-full w-full" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+              </svg>
             </div>
+            <h1 className="text-xl font-bold tracking-tight text-contrast hidden sm:block">ArcadeHub</h1>
           </Link>
         </div>
 
-        {/* Right: Language / Extra (Placeholder) */}
-        <div className="hidden md:block">
-           <button className="flex items-center gap-2 bg-gray-600/50 hover:bg-gray-500 px-3 py-1 rounded text-sm text-white font-bold transition">
-             EN ▼
-           </button>
+        {/* Center: Search Bar (Desktop) */}
+        <div className="hidden md:flex flex-1 max-w-2xl mx-4">
+          <div className="relative w-full group">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-secondary group-focus-within:text-primary">
+              <span className="text-lg">🔍</span>
+            </div>
+            <input 
+              className="block w-full p-2.5 pl-10 text-sm text-contrast border border-secondary rounded-lg bg-white focus:ring-2 focus:ring-primary focus:border-primary outline-none placeholder-secondary transition-all shadow-sm" 
+              placeholder="Search for games..." 
+              type="text"
+            />
+          </div>
         </div>
 
+        {/* Right: Actions */}
+        <div className="flex items-center gap-3 shrink-0">
+          <Link to="/portfolio" className="hidden md:flex items-center px-4 py-2 text-sm font-bold text-contrast hover:text-primary transition">
+            Portfolio
+          </Link>
+          <button className="flex items-center justify-center p-2 rounded-lg text-secondary hover:bg-secondary/20 transition-colors relative">
+            <span className="text-xl">🔔</span>
+            <span className="absolute top-2 right-2 size-2 bg-primary rounded-full border border-[#FEFAE0]"></span>
+          </button>
+          <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+            AH
+          </div>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

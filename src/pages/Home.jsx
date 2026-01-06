@@ -4,58 +4,86 @@ import SkeletonCard from "../components/ui/SkeletonCard";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { games = [], loading } = useGames(20) || {}; // Fetch more games for the grid
+  const { games = [], loading } = useGames(20);
 
   return (
-    <div className="min-h-screen bg-white pb-20 pt-8"> {/* White background like the site */}
+    <div className="min-h-screen pb-20">
       
-      {/* Title Section */}
-      <div className="text-center mb-10">
-        <h2 className="text-[#005c74] text-4xl font-extrabold uppercase tracking-wide">
-          All Games
-        </h2>
-        <div className="h-1 w-20 bg-[#005c74] mx-auto mt-2 rounded-full"></div>
-      </div>
+      {/* Category Pills (Sticky) */}
+      <section className="sticky top-20 z-30 bg-[#FEFAE0]/95 backdrop-blur-md py-4 border-b border-secondary/10 mb-8">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 xl:px-40">
+          <div className="flex gap-3 overflow-x-auto hide-scroll pb-2">
+            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary text-white px-6 transition-transform active:scale-95 shadow-lg shadow-primary/20">
+              <span className="text-lg">🎮</span>
+              <span className="text-sm font-bold">All Games</span>
+            </button>
+            {["Action", "Puzzle", "Strategy", "Sports", "Racing"].map(cat => (
+              <button key={cat} className="flex h-10 shrink-0 items-center justify-center rounded-full bg-white border border-secondary px-6 hover:border-primary hover:text-primary text-contrast transition-colors shadow-sm font-medium">
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      <div className="max-w-[1400px] mx-auto px-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      {/* Main Grid */}
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 xl:px-40">
+        
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <span className="w-1.5 h-8 bg-primary rounded-full"></span>
+            <h2 className="text-2xl md:text-3xl font-bold text-contrast">Featured Games</h2>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           
           {loading ? (
-            Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)
+            Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
           ) : (
-            games.length > 0 ? (
-              games.map((game) => (
-                <Link 
-                  key={game.id} 
-                  to={`/game/${game.slug}`} 
-                  className="group flex flex-col items-center"
-                >
-                  {/* Card Container */}
-                  <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <SmartImage 
-                      src={game.bannerUrl} 
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                    />
-                    
-                    {/* Hover Overlay (Play Button) */}
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
-                       <div className="w-12 h-12 bg-[#f05a28] rounded-full flex items-center justify-center text-white shadow-lg">
-                         ▶
-                       </div>
+            games.map((game) => (
+              <Link 
+                key={game.id} 
+                to={`/game/${game.slug}`} 
+                className="group relative flex flex-col gap-3"
+              >
+                {/* Image Container */}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-secondary shadow-sm">
+                  <div className="h-full w-full transition-transform duration-500 group-hover:scale-110">
+                     <SmartImage src={game.bannerUrl} className="h-full w-full object-cover" />
+                  </div>
+                  
+                  {/* Overlay Play Button */}
+                  <div className="absolute inset-0 bg-contrast/0 group-hover:bg-contrast/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <div className="size-14 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transform scale-50 group-hover:scale-100 transition-transform duration-300">
+                       <span className="text-3xl ml-1">▶</span>
                     </div>
                   </div>
 
-                  {/* Title Below Card */}
-                  <h3 className="mt-3 text-[#005c74] font-bold text-sm text-center line-clamp-1 group-hover:text-[#f05a28] transition">
+                  {/* Rating Badge */}
+                  <div className="absolute top-3 right-3">
+                    <span className="px-2 py-1 bg-contrast/80 backdrop-blur-md text-white text-xs font-bold rounded-lg flex items-center gap-1 shadow-lg">
+                      <span className="text-yellow-400">★</span> 4.8
+                    </span>
+                  </div>
+                </div>
+
+                {/* Text Info */}
+                <div className="px-1">
+                  <h3 className="font-bold text-lg text-contrast group-hover:text-primary transition-colors truncate">
                     {game.title}
                   </h3>
-                </Link>
-              ))
-            ) : (
-              <div className="col-span-full text-center text-gray-400 py-20">
-                No games found. Seed the database to see content.
-              </div>
-            )
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-sm text-primary/80 font-medium">
+                      {game.tags?.[0] || "Arcade"} • Casual
+                    </p>
+                    <span className="text-xs text-secondary bg-white px-2 py-0.5 rounded border border-secondary/30">
+                       PLAY
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))
           )}
         </div>
       </div>

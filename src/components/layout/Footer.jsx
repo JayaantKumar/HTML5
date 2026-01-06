@@ -1,73 +1,96 @@
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
-  const cats = ["Home", "New", "Best", "Match 3", "Bubble Shooter", "Puzzle", "Quiz", "Cards", "Girls", "Jump & Run", "Arcade", "Racing", "Sport", "Multiplayer", "All Games"];
+  const categories = [
+    { name: "Home", icon: "🏠", link: "/" },
+    { name: "New", icon: "🆕", link: "/" },
+    { name: "Best", icon: "👍", link: "/" },
+    { name: "Match 3", icon: "💎", link: "/" },
+    { name: "Bubble Shooter", icon: "🔵", link: "/" },
+    { name: "Puzzle", icon: "🧩", link: "/" },
+    { name: "Quiz", icon: "❓", link: "/" },
+    { name: "Cards", icon: "🃏", link: "/" },
+    { name: "Girls", icon: "🎀", link: "/" },
+    { name: "Jump & Run", icon: "🏃", link: "/" },
+    { name: "Arcade", icon: "🕹️", link: "/" },
+    { name: "Racing", icon: "🏎️", link: "/" },
+    { name: "Sport", icon: "⚽", link: "/" },
+    { name: "Multiplayer", icon: "👥", link: "/" },
+    { name: "All Games", icon: "☰", link: "/" },
+  ];
 
   return (
-    <footer className="bg-[#222222] text-white pt-16 pb-8 mt-auto">
-      <div className="max-w-[1200px] mx-auto px-4 text-center">
+    <footer className="bg-[#0A400C] mt-auto text-[#B1AB86] border-t border-[#B1AB86]/20 pt-16 pb-12">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 xl:px-40">
         
-        {/* 1. Category Pills */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {cats.map(cat => (
-             <button key={cat} className="px-4 py-2 bg-[#333333] hover:bg-white hover:text-black rounded-lg text-sm font-bold uppercase transition flex items-center gap-2">
-               {cat === 'Home' && '🏠'} {cat}
-             </button>
+        {/* 1. Category Pills (Styled to match your Green Theme) */}
+        <div className="flex flex-wrap justify-center gap-3 mb-16 border-b border-[#B1AB86]/10 pb-12">
+          {categories.map((cat) => (
+             <Link 
+               key={cat.name} 
+               to={cat.link}
+               className="group flex items-center gap-2 px-4 py-2 bg-[#0F4E11] border border-[#B1AB86]/20 hover:bg-[#FEFAE0] hover:text-[#0A400C] hover:border-[#FEFAE0] rounded-lg text-xs font-bold uppercase transition-all duration-300"
+             >
+               <span className="text-sm">{cat.icon}</span>
+               <span>{cat.name}</span>
+             </Link>
           ))}
         </div>
 
-        {/* 2. Promo Boxes */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16 max-w-4xl mx-auto">
-           {/* About */}
-           <div className="bg-[#1a1a1a] p-6 rounded-lg flex items-center gap-4 text-left hover:bg-[#2a2a2a] transition cursor-pointer group">
-              <div className="bg-[#f05a28] text-white text-3xl font-bold h-12 w-12 flex items-center justify-center rounded group-hover:scale-110 transition">5</div>
-              <div>
-                <h4 className="font-bold uppercase text-lg">About</h4>
-                <p className="text-gray-400 text-xs uppercase">What is HTML5 Games?</p>
-              </div>
-           </div>
-           
-           {/* Publishers */}
-           <div className="bg-[#1a1a1a] p-6 rounded-lg flex items-center gap-4 text-left hover:bg-[#2a2a2a] transition cursor-pointer group">
-              <div className="bg-[#f05a28] text-white text-3xl font-bold h-12 w-12 flex items-center justify-center rounded group-hover:scale-110 transition">📡</div>
-              <div>
-                <h4 className="font-bold uppercase text-lg">Publishers</h4>
-                <p className="text-gray-400 text-xs uppercase">Buy and License HTML5 Games</p>
-              </div>
-           </div>
-           
-           {/* Developers (Full Width on mobile, centered on desktop grid logic) */}
-           <div className="md:col-span-2 flex justify-center">
-             <div className="bg-[#1a1a1a] p-6 rounded-lg flex items-center gap-4 text-left hover:bg-[#2a2a2a] transition cursor-pointer w-full md:w-auto min-w-[300px] group">
-                <div className="bg-[#f05a28] text-white text-3xl font-bold h-12 w-12 flex items-center justify-center rounded group-hover:scale-110 transition">☁️</div>
-                <div>
-                  <h4 className="font-bold uppercase text-lg">Developers</h4>
-                  <p className="text-gray-400 text-xs uppercase">Submit your HTML5 Game</p>
-                </div>
-             </div>
-           </div>
+        {/* 2. Main 4-Column Layout (From your reference code) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          
+          {/* Brand Column */}
+          <div className="col-span-1 md:col-span-1">
+            <div className="flex items-center gap-2 mb-6 text-[#819067]">
+              <svg className="size-8" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+              </svg>
+              <span className="font-bold text-2xl text-[#FEFAE0]">ArcadeHub</span>
+            </div>
+            <p className="text-sm opacity-80 leading-relaxed">
+              The ultimate destination for next-gen HTML5 browser games. Play instantly, no downloads required.
+            </p>
+          </div>
+
+          {/* Discover Column */}
+          <div>
+            <h4 className="font-bold text-[#FEFAE0] mb-6">Discover</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              <li><Link to="/" className="hover:text-[#FEFAE0] transition-colors">New Arrivals</Link></li>
+              <li><Link to="/" className="hover:text-[#FEFAE0] transition-colors">Most Popular</Link></li>
+              <li><Link to="/portfolio" className="hover:text-[#FEFAE0] transition-colors">Editor's Picks</Link></li>
+            </ul>
+          </div>
+
+          {/* Support Column */}
+          <div>
+            <h4 className="font-bold text-[#FEFAE0] mb-6">Support</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              <li><Link to="/contact" className="hover:text-[#FEFAE0] transition-colors">Contact Us</Link></li>
+              <li><a href="#" className="hover:text-[#FEFAE0] transition-colors">Submit a Game</a></li>
+              <li><a href="#" className="hover:text-[#FEFAE0] transition-colors">Developers</a></li>
+            </ul>
+          </div>
+
+          {/* Legal Column */}
+          <div>
+            <h4 className="font-bold text-[#FEFAE0] mb-6">Legal</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              <li><a href="#" className="hover:text-[#FEFAE0] transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-[#FEFAE0] transition-colors">Privacy Policy</a></li>
+            </ul>
+          </div>
         </div>
 
-        {/* 3. Bottom Links */}
-        <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400 underline decoration-gray-600 mb-8">
-           <a href="#" className="hover:text-white">Imprint</a>
-           <a href="#" className="hover:text-white">Ad Vendors</a>
-           <a href="#" className="hover:text-white">Privacy Policy</a>
-           <a href="#" className="hover:text-white">gamebow.com</a>
-        </div>
-
-        {/* 4. Copyright & Logo */}
-        <div className="text-gray-500 text-xs mb-4">
-          © 2014-{currentYear} HTML5Games.com
-        </div>
-        
-        <div className="flex flex-col items-center gap-1 opacity-50 hover:opacity-100 transition">
-           <span className="text-[10px] uppercase tracking-widest">powered by</span>
-           {/* Simple CSS logo for Famobi placeholder */}
-           <div className="font-black text-xl tracking-tighter text-white">
-             Famobi
-           </div>
+        {/* 3. Bottom Bar */}
+        <div className="pt-8 border-t border-[#B1AB86]/20 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm opacity-60">© 2026 ArcadeHub Inc. All rights reserved.</p>
+          <div className="flex gap-6">
+            <a href="#" className="opacity-60 hover:opacity-100 hover:text-[#FEFAE0] transition">Twitter</a>
+            <a href="#" className="opacity-60 hover:opacity-100 hover:text-[#FEFAE0] transition">GitHub</a>
+            <a href="#" className="opacity-60 hover:opacity-100 hover:text-[#FEFAE0] transition">Discord</a>
+          </div>
         </div>
 
       </div>

@@ -2,19 +2,13 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const CATEGORIES = [
-  { name: "Home", icon: "🏠" },
-  { name: "New", icon: "🆕" },
-  { name: "Best", icon: "👍" },
-  { name: "Match 3", icon: "💎" },
-  { name: "Bubble Shooter", icon: "🔵" },
+  { name: "All Games", icon: "🎮" },
+  { name: "Action", icon: "⚔️" },
   { name: "Puzzle", icon: "🧩" },
-  { name: "Quiz", icon: "❓" },
-  { name: "Cards", icon: "🃏" },
-  { name: "Girls", icon: "🎀" },
-  { name: "Jump & Run", icon: "🏃" },
-  { name: "Arcade", icon: "🕹️" },
+  { name: "Strategy", icon: "♟️" },
   { name: "Racing", icon: "🏎️" },
-  { name: "Sport", icon: "⚽" },
+  { name: "Sports", icon: "⚽" },
+  { name: "Adventure", icon: "🗺️" },
 ];
 
 const Sidebar = ({ isOpen, closeSidebar }) => {
@@ -24,7 +18,7 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       {isOpen && (
         <div 
           onClick={closeSidebar}
-          className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+          className="fixed inset-0 bg-contrast/20 backdrop-blur-sm z-40 transition-opacity"
         />
       )}
 
@@ -32,25 +26,27 @@ const Sidebar = ({ isOpen, closeSidebar }) => {
       <motion.div
         initial={{ x: "-100%" }}
         animate={{ x: isOpen ? "0%" : "-100%" }}
-        transition={{ type: "tween", duration: 0.3 }}
-        className="fixed top-16 left-0 h-[calc(100vh-64px)] w-64 bg-[#f0f2f5] z-50 overflow-y-auto border-r border-gray-300 shadow-xl"
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="fixed top-20 left-0 h-[calc(100vh-80px)] w-64 bg-[#FEFAE0] z-50 overflow-y-auto border-r border-secondary/30 shadow-2xl"
       >
-        <div className="p-4 space-y-1">
+        <div className="p-6 space-y-2">
+          <div className="text-xs font-bold text-secondary uppercase tracking-wider mb-4 px-2">Discover</div>
+          
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.name}
               to="/"
               onClick={closeSidebar}
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-white hover:text-[#f05a28] hover:shadow-sm rounded-lg transition font-bold"
+              className="flex items-center gap-3 px-4 py-3 text-contrast hover:bg-primary hover:text-white rounded-xl transition-all font-medium group"
             >
-              <span className="text-xl">{cat.icon}</span>
+              <span className="text-lg group-hover:scale-110 transition-transform">{cat.icon}</span>
               <span>{cat.name}</span>
             </Link>
           ))}
-          {/* Admin Link for you */}
-          <div className="border-t border-gray-300 my-2 pt-2">
-             <Link to="/admin" onClick={closeSidebar} className="flex items-center gap-3 px-4 py-3 text-gray-500 hover:text-cyan-600 font-bold text-sm">
-                ⚙️ Admin Panel
+
+          <div className="border-t border-secondary/20 my-4 pt-4">
+             <Link to="/admin" onClick={closeSidebar} className="flex items-center gap-3 px-4 py-3 text-secondary hover:text-primary font-bold text-sm">
+                ⚙️ Admin Dashboard
              </Link>
           </div>
         </div>

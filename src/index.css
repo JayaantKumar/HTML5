@@ -1,20 +1,39 @@
+/* 1. Import Fonts MUST be first */
+@import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap');
+
+/* 2. Then Tailwind */
 @import "tailwindcss";
 
+/* 3. Then Theme Configuration */
+@theme {
+  --font-display: "Spline Sans", sans-serif;
+  
+  --color-primary: #819067;       /* Sage Green */
+  --color-secondary: #B1AB86;     /* Beige */
+  --color-contrast: #0A400C;      /* Deep Forest Green */
+  --color-bg-light: #FEFAE0;      /* Cream */
+  --color-surface-dark: #1a2c34;
+}
+
+/* 4. Global Resets */
 :root {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --bg-primary: #0f172a;
-  --text-primary: #f8fafc;
+  font-family: var(--font-display);
+  background-color: var(--color-bg-light);
+  color: var(--color-contrast);
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  background-color: var(--color-bg-light);
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
 }
 
-/* Add this Custom Animation */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* Utilities */
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+.hide-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

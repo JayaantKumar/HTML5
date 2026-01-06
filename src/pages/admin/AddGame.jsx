@@ -8,15 +8,14 @@ const AddGame = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   
-  // Form State
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
     description: "",
-    type: "game", // 'game', 'client', 'ghost'
+    type: "game",
     isVisible: true,
-    tags: "", // Comma separated string
-    banner: null, // File object
+    tags: "",
+    banner: null,
     youtubeUrl: "",
     clientUrl: ""
   });
@@ -32,7 +31,6 @@ const AddGame = () => {
     }
   };
 
-  // Auto-generate slug from title
   const handleTitleChange = (e) => {
     const title = e.target.value;
     const slug = title.toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
@@ -46,12 +44,10 @@ const AddGame = () => {
     try {
       setLoading(true);
 
-      // 1. Upload Image to Firebase Storage
       const storageRef = ref(storage, `banners/${Date.now()}_${formData.banner.name}`);
       const snapshot = await uploadBytes(storageRef, formData.banner);
       const bannerUrl = await getDownloadURL(snapshot.ref);
 
-      // 2. Prepare Data for Firestore
       const docData = {
         title: formData.title,
         slug: formData.slug,
@@ -61,15 +57,13 @@ const AddGame = () => {
         bannerUrl: bannerUrl,
         youtubeUrl: formData.youtubeUrl,
         clientUrl: formData.clientUrl,
-        tags: formData.tags.split(",").map(t => t.trim()), // Convert "Action, RPG" -> ["Action", "RPG"]
+        tags: formData.tags.split(",").map(t => t.trim()),
         createdAt: Timestamp.now()
       };
 
-      // 3. Save to Firestore
       await addDoc(collection(db, "games"), docData);
-
       alert("✅ Project Added Successfully!");
-      navigate("/admin"); // Go back to dashboard
+      navigate("/admin");
 
     } catch (error) {
       console.error("Error adding document: ", error);
@@ -80,128 +74,132 @@ const AddGame = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] p-8 pb-20">
-      <div className="max-w-2xl mx-auto bg-slate-800 p-8 rounded-xl border border-slate-700">
-        <h1 className="text-2xl font-bold text-white mb-6">Add New Project</h1>
+    <div className="min-h-screen bg-[#FEFAE0] p-8 pb-20">
+      <div className="max-w-3xl mx-auto bg-white p-10 rounded-2xl border border-secondary/20 shadow-xl">
+        <h1 className="text-3xl font-black text-contrast mb-8 border-b border-secondary/10 pb-4">
+          Add New Project
+        </h1>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           
           {/* Title & Slug */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-slate-400 text-sm mb-1">Title</label>
+              <label className="block text-contrast font-bold text-sm mb-2">Title</label>
               <input 
                 type="text" 
                 name="title"
                 value={formData.title} 
                 onChange={handleTitleChange}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white"
+                className="w-full bg-white border-2 border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-0 outline-none transition-colors"
                 required
               />
             </div>
             <div>
-              <label className="block text-slate-400 text-sm mb-1">Slug (URL)</label>
+              <label className="block text-contrast font-bold text-sm mb-2">Slug (Auto)</label>
               <input 
                 type="text" 
                 name="slug"
                 value={formData.slug} 
                 onChange={handleChange}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-slate-400"
+                className="w-full bg-secondary/10 border-2 border-transparent rounded-xl p-3 text-primary font-mono text-sm"
                 required
               />
             </div>
           </div>
 
           {/* Type & Visibility */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#FEFAE0] p-6 rounded-xl border border-secondary/10">
             <div>
-              <label className="block text-slate-400 text-sm mb-1">Type</label>
+              <label className="block text-contrast font-bold text-sm mb-2">Type</label>
               <select 
                 name="type" 
                 value={formData.type} 
                 onChange={handleChange}
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white"
+                className="w-full bg-white border-2 border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary outline-none"
               >
                 <option value="game">Game (Home & Portfolio)</option>
                 <option value="client">Client Project (Portfolio Only)</option>
                 <option value="ghost">Experiment (Portfolio Only)</option>
               </select>
             </div>
-            <div className="flex items-center pt-6">
-              <label className="flex items-center space-x-2 cursor-pointer">
+            <div className="flex items-center pt-8">
+              <label className="flex items-center space-x-3 cursor-pointer group">
                 <input 
                   type="checkbox" 
                   name="isVisible"
                   checked={formData.isVisible}
                   onChange={handleChange}
-                  className="w-5 h-5 accent-cyan-500"
+                  className="size-6 accent-primary rounded focus:ring-0 cursor-pointer"
                 />
-                <span className="text-white">Visible to Public</span>
+                <span className="text-contrast font-bold group-hover:text-primary transition-colors">Visible to Public</span>
               </label>
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-slate-400 text-sm mb-1">Short Description</label>
+            <label className="block text-contrast font-bold text-sm mb-2">Short Description</label>
             <textarea 
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white h-24"
+              className="w-full bg-white border-2 border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-0 outline-none transition-colors h-32"
               required
             />
           </div>
 
           {/* Image Upload */}
-          <div>
-            <label className="block text-slate-400 text-sm mb-1">Banner Image (Required)</label>
+          <div className="p-6 border-2 border-dashed border-secondary/40 rounded-xl hover:border-primary/50 transition-colors bg-secondary/5">
+            <label className="block text-contrast font-bold text-sm mb-2">Banner Image (Required)</label>
             <input 
               type="file" 
               name="banner"
               onChange={handleChange}
               accept="image/*"
-              className="w-full text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20"
+              className="w-full text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-primary file:text-white hover:file:bg-contrast transition-all cursor-pointer"
               required
             />
           </div>
 
           {/* Extra Links */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-slate-400 text-sm mb-1">Tags (comma separated)</label>
+              <label className="block text-contrast font-bold text-sm mb-2">Tags (comma separated)</label>
               <input 
                 type="text" 
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
                 placeholder="RPG, React, 3D"
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white"
+                className="w-full bg-white border-2 border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-0 outline-none"
               />
             </div>
             <div>
-              <label className="block text-slate-400 text-sm mb-1">Client/Demo URL</label>
+              <label className="block text-contrast font-bold text-sm mb-2">Client/Demo URL</label>
               <input 
                 type="url" 
                 name="clientUrl"
                 value={formData.clientUrl}
                 onChange={handleChange}
                 placeholder="https://..."
-                className="w-full bg-slate-900 border border-slate-700 rounded p-2 text-white"
+                className="w-full bg-white border-2 border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-0 outline-none"
               />
             </div>
           </div>
 
           {/* Submit Button */}
-          <button 
-            type="submit" 
-            disabled={loading}
-            className={`w-full py-3 rounded font-bold text-black transition ${
-              loading ? "bg-slate-600 cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-400"
-            }`}
-          >
-            {loading ? "Uploading..." : "🚀 Publish Project"}
-          </button>
+          <div className="pt-4">
+            <button 
+              type="submit" 
+              disabled={loading}
+              className={`w-full py-4 rounded-xl font-bold text-lg text-white transition-all shadow-xl ${
+                loading ? "bg-secondary cursor-not-allowed" : "bg-primary hover:bg-contrast hover:scale-[1.01]"
+              }`}
+            >
+              {loading ? "Uploading..." : "🚀 Publish Project"}
+            </button>
+          </div>
 
         </form>
       </div>

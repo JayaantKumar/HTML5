@@ -1,27 +1,25 @@
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
-import * as FM from "framer-motion"; // Fix for motion error
+import * as FM from "framer-motion"; 
 
 const { motion } = FM;
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(null); // 'success' | 'error' | null
+  const [status, setStatus] = useState(null);
 
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Get keys from .env
     const serviceId = import.meta.env.VITE_EMAIL_SERVICE_ID;
     const templateId = import.meta.env.VITE_EMAIL_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAIL_PUBLIC_KEY;
 
-    // Send the form data
     emailjs.sendForm(serviceId, templateId, e.target, publicKey)
       .then(() => {
         setStatus("success");
-        e.target.reset(); // Clear form
+        e.target.reset(); 
       })
       .catch((error) => {
         console.error("Email Error:", error);
@@ -29,98 +27,113 @@ const Contact = () => {
       })
       .finally(() => {
         setLoading(false);
-        // Clear status message after 5 seconds
         setTimeout(() => setStatus(null), 5000);
       });
   };
 
   return (
-    <div className="min-h-screen pt-20 pb-10 px-6 max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#FEFAE0] pt-10 pb-20 px-4">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="grid md:grid-cols-2 gap-12 items-center"
+        className="max-w-5xl mx-auto bg-white rounded-3xl overflow-hidden shadow-xl border border-secondary/20 grid md:grid-cols-2"
       >
-        {/* Left Side: Info */}
-        <div>
-          <h1 className="text-4xl font-bold text-white mb-6">Let's Work Together</h1>
-          <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-            I'm currently available for freelance work and open to full-time opportunities.
-            If you have a project that needs some creative touch, let's chat.
-          </p>
+        
+        {/* Left Side: Info (Green Background) */}
+        <div className="bg-contrast p-10 md:p-12 text-[#FEFAE0] flex flex-col justify-between relative overflow-hidden">
+          {/* Decorative Circle */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/20 rounded-full blur-3xl"></div>
           
-          <div className="space-y-4">
-            <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-              <h3 className="text-cyan-400 font-bold text-sm uppercase">Email</h3>
-              <p className="text-white">contact@gamedev.com</p>
+          <div>
+            <h1 className="text-4xl font-black mb-6">Let's Talk</h1>
+            <p className="opacity-90 text-lg leading-relaxed mb-8">
+              Have a project in mind? Looking for a developer? 
+              Fill out the form and I'll get back to you within 24 hours.
+            </p>
+          </div>
+
+          <div className="space-y-6 z-10">
+            <div className="flex items-center gap-4">
+              <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                ✉️
+              </div>
+              <div>
+                <h3 className="font-bold text-sm uppercase opacity-70">Email</h3>
+                <p className="font-medium">contact@arcadehub.com</p>
+              </div>
             </div>
-            <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
-              <h3 className="text-cyan-400 font-bold text-sm uppercase">Socials</h3>
-              <div className="flex gap-4 mt-2 text-sm text-slate-300">
-                <a href="#" className="hover:text-white underline">LinkedIn</a>
-                <a href="#" className="hover:text-white underline">GitHub</a>
-                <a href="#" className="hover:text-white underline">Twitter</a>
+            
+            <div className="flex items-center gap-4">
+              <div className="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                📍
+              </div>
+              <div>
+                <h3 className="font-bold text-sm uppercase opacity-70">Location</h3>
+                <p className="font-medium">Remote / Worldwide</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Form */}
-        <div className="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-2xl">
+        {/* Right Side: Form (White Background) */}
+        <div className="p-10 md:p-12 bg-white">
           <form onSubmit={sendEmail} className="space-y-6">
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Your Name</label>
+              <label className="block text-sm font-bold text-contrast mb-2">Name</label>
               <input 
                 type="text" 
-                name="user_name" // Must match EmailJS template variable
+                name="user_name" 
                 required
-                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none transition"
+                className="w-full bg-[#FEFAE0]/50 border border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                placeholder="John Doe"
               />
             </div>
             
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Email Address</label>
+              <label className="block text-sm font-bold text-contrast mb-2">Email</label>
               <input 
                 type="email" 
-                name="user_email" // Must match EmailJS template variable
+                name="user_email" 
                 required
-                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none transition"
+                className="w-full bg-[#FEFAE0]/50 border border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-1 focus:ring-primary outline-none transition"
+                placeholder="john@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Message</label>
+              <label className="block text-sm font-bold text-contrast mb-2">Message</label>
               <textarea 
-                name="message" // Must match EmailJS template variable
+                name="message" 
                 required
                 rows="4"
-                className="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-white focus:border-cyan-500 outline-none transition"
+                className="w-full bg-[#FEFAE0]/50 border border-secondary/30 rounded-xl p-3 text-contrast focus:border-primary focus:ring-1 focus:ring-primary outline-none transition resize-none"
+                placeholder="Tell me about your project..."
               ></textarea>
             </div>
 
             <button 
               type="submit"
               disabled={loading}
-              className={`w-full py-4 rounded-lg font-bold text-black transition transform active:scale-95 ${
-                loading ? "bg-slate-500 cursor-not-allowed" : "bg-cyan-500 hover:bg-cyan-400 shadow-lg shadow-cyan-500/20"
+              className={`w-full py-4 rounded-xl font-bold text-white transition-all transform active:scale-95 shadow-lg ${
+                loading ? "bg-secondary cursor-not-allowed" : "bg-primary hover:bg-contrast shadow-primary/20"
               }`}
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
 
-            {/* Status Messages */}
             {status === "success" && (
-              <div className="p-3 bg-green-500/20 text-green-400 text-center rounded-lg text-sm font-medium">
-                ✅ Message sent! I'll get back to you soon.
+              <div className="p-3 bg-green-50 text-green-700 text-center rounded-lg text-sm font-bold border border-green-100">
+                ✅ Message sent successfully!
               </div>
             )}
             {status === "error" && (
-              <div className="p-3 bg-red-500/20 text-red-400 text-center rounded-lg text-sm font-medium">
-                ❌ Failed to send. Please try again later.
+              <div className="p-3 bg-red-50 text-red-700 text-center rounded-lg text-sm font-bold border border-red-100">
+                ❌ Something went wrong.
               </div>
             )}
           </form>
         </div>
+
       </motion.div>
     </div>
   );

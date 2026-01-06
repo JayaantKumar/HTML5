@@ -9,7 +9,6 @@ const Dashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  // FIX: fetchGames is now defined INSIDE the useEffect
   useEffect(() => {
     const fetchGames = async () => {
       try {
@@ -20,15 +19,13 @@ const Dashboard = () => {
         console.error("Error fetching games:", error);
       }
     };
-
     fetchGames();
-  }, []); // Empty dependency array = runs once on mount
+  }, []);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure? This cannot be undone.")) {
       try {
         await deleteDoc(doc(db, "games", id));
-        // Manually filter the state to remove the deleted item (faster than re-fetching)
         setGames(prevGames => prevGames.filter(game => game.id !== id));
       } catch (error) {
         alert("Error deleting game: " + error.message);
@@ -42,65 +39,84 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f172a] p-8">
+    <div className="min-h-screen bg-[#FEFAE0] p-8 pb-20">
       <div className="max-w-6xl mx-auto">
+        
         {/* Header */}
-        <div className="flex justify-between items-center mb-8 bg-slate-800 p-6 rounded-xl border border-slate-700">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 bg-white p-6 rounded-2xl border border-secondary/20 shadow-sm">
           <div>
-            <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
-            <p className="text-slate-400 text-sm">Manage your games and projects</p>
+            <h1 className="text-3xl font-black text-contrast">Dashboard</h1>
+            <p className="text-primary font-medium mt-1">Manage your game library</p>
           </div>
-          <div className="flex gap-4">
-             <Link to="/admin/add" className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded font-bold text-sm">
-               + Add New Game
+          <div className="flex gap-4 mt-4 md:mt-0">
+             <Link 
+               to="/admin/add" 
+               className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 transition-transform active:scale-95 flex items-center gap-2"
+             >
+               <span>+</span> Add Game
              </Link>
-             <button onClick={handleLogout} className="bg-red-600/20 text-red-400 border border-red-600/50 px-4 py-2 rounded text-sm hover:bg-red-600 hover:text-white transition">
+             <button 
+               onClick={handleLogout} 
+               className="border-2 border-red-100 text-red-500 bg-red-50 hover:bg-red-100 px-6 py-3 rounded-xl text-sm font-bold transition-colors"
+             >
                Logout
              </button>
           </div>
         </div>
 
         {/* Content Table */}
-        <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700">
-          <table className="w-full text-left">
-            <thead className="bg-slate-900 text-slate-400 uppercase text-xs">
-              <tr>
-                <th className="p-4">Title</th>
-                <th className="p-4">Type</th>
-                <th className="p-4">Visible</th>
-                <th className="p-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-700 text-slate-300">
-              {games.map(game => (
-                <tr key={game.id} className="hover:bg-slate-700/50 transition">
-                  <td className="p-4 font-medium">{game.title}</td>
-                  <td className="p-4">
-                    <span className="bg-slate-900 px-2 py-1 rounded text-xs border border-slate-600">
-                      {game.type || 'game'}
-                    </span>
-                  </td>
-                  <td className="p-4">
-                    {game.isVisible ? (
-                      <span className="text-green-400 text-xs font-bold">● Live</span>
-                    ) : (
-                      <span className="text-slate-500 text-xs">○ Hidden</span>
-                    )}
-                  </td>
-                  <td className="p-4 text-right space-x-2">
-                    <button 
-                      onClick={() => handleDelete(game.id)}
-                      className="text-red-400 hover:text-red-300 text-sm font-medium"
-                    >
-                      Delete
-                    </button>
-                  </td>
+        <div className="bg-white rounded-2xl overflow-hidden border border-secondary/20 shadow-lg">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="bg-contrast text-[#FEFAE0] uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="p-5 font-bold">Title</th>
+                  <th className="p-5 font-bold">Type</th>
+                  <th className="p-5 font-bold">Status</th>
+                  <th className="p-5 font-bold text-right">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-secondary/10">
+                {games.map(game => (
+                  <tr key={game.id} className="hover:bg-primary/5 transition-colors">
+                    <td className="p-5">
+                      <div className="font-bold text-contrast text-lg">{game.title}</div>
+                      <div className="text-xs text-secondary font-mono mt-1">{game.slug}</div>
+                    </td>
+                    <td className="p-5">
+                      <span className="bg-secondary/20 text-contrast px-3 py-1 rounded-full text-xs font-bold uppercase border border-secondary/30">
+                        {game.type || 'game'}
+                      </span>
+                    </td>
+                    <td className="p-5">
+                      {game.isVisible ? (
+                        <span className="inline-flex items-center gap-1.5 text-green-600 text-xs font-bold bg-green-50 px-2 py-1 rounded border border-green-100">
+                          <span className="size-2 bg-green-500 rounded-full animate-pulse"></span> Live
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 text-gray-400 text-xs font-bold bg-gray-50 px-2 py-1 rounded border border-gray-100">
+                          <span className="size-2 bg-gray-400 rounded-full"></span> Hidden
+                        </span>
+                      )}
+                    </td>
+                    <td className="p-5 text-right">
+                      <button 
+                        onClick={() => handleDelete(game.id)}
+                        className="text-red-400 hover:text-red-600 text-sm font-bold hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
           {games.length === 0 && (
-             <div className="p-8 text-center text-slate-500">No content found.</div>
+             <div className="p-12 text-center text-secondary">
+               No games found. Start by adding one!
+             </div>
           )}
         </div>
       </div>
