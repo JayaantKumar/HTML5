@@ -2,8 +2,8 @@
 
 :root {
   --font-sans: 'Inter', system-ui, sans-serif;
-  --bg-primary: #0f172a; /* Slate 900 */
-  --text-primary: #f8fafc; /* Slate 50 */
+  --bg-primary: #0f172a;
+  --text-primary: #f8fafc;
 }
 
 body {
@@ -11,4 +11,10 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* Add this Custom Animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }

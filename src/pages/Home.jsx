@@ -1,51 +1,63 @@
 import { useGames } from "../hooks/useGames";
 import SmartImage from "../components/ui/SmartImage";
+import SkeletonCard from "../components/ui/SkeletonCard"; 
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  // 🛡️ Safety: Default to empty object if hook fails, default games to []
-  const { games = [], loading } = useGames(8) || {}; 
-
-  if (loading) return <div className="text-center p-20">Loading Games...</div>;
+  const { games = [], loading } = useGames(20) || {}; // Fetch more games for the grid
 
   return (
-    <div className="min-h-screen p-8">
-      <header className="mb-12">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-          Our Games
-        </h1>
-        <p className="text-slate-400 mt-2">Latest releases and updates</p>
-      </header>
+    <div className="min-h-screen bg-white pb-20 pt-8"> {/* White background like the site */}
+      
+      {/* Title Section */}
+      <div className="text-center mb-10">
+        <h2 className="text-[#005c74] text-4xl font-extrabold uppercase tracking-wide">
+          All Games
+        </h2>
+        <div className="h-1 w-20 bg-[#005c74] mx-auto mt-2 rounded-full"></div>
+      </div>
 
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {/* 🛡️ Safety Check: Ensure games is an array before mapping */}
-        {Array.isArray(games) && games.length > 0 ? (
-          games.map((game) => (
-            <Link key={game.id} to={`/game/${game.slug}`} className="group relative block h-64 overflow-hidden rounded-xl bg-slate-800 transition-transform hover:-translate-y-2">
-              <SmartImage 
-                src={game.bannerUrl} 
-                className="h-full w-full opacity-90 transition-opacity group-hover:opacity-100" 
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-4 flex flex-col justify-end">
-                <h3 className="font-bold text-lg text-white">{game.title}</h3>
-                <div className="flex gap-2 mt-2">
-                  {game.tags?.map(tag => (
-                    <span key={tag} className="text-xs px-2 py-1 bg-white/10 rounded-full backdrop-blur-sm">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+      <div className="max-w-[1400px] mx-auto px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          
+          {loading ? (
+            Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)
+          ) : (
+            games.length > 0 ? (
+              games.map((game) => (
+                <Link 
+                  key={game.id} 
+                  to={`/game/${game.slug}`} 
+                  className="group flex flex-col items-center"
+                >
+                  {/* Card Container */}
+                  <div className="relative w-full aspect-square rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <SmartImage 
+                      src={game.bannerUrl} 
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    />
+                    
+                    {/* Hover Overlay (Play Button) */}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
+                       <div className="w-12 h-12 bg-[#f05a28] rounded-full flex items-center justify-center text-white shadow-lg">
+                         ▶
+                       </div>
+                    </div>
+                  </div>
+
+                  {/* Title Below Card */}
+                  <h3 className="mt-3 text-[#005c74] font-bold text-sm text-center line-clamp-1 group-hover:text-[#f05a28] transition">
+                    {game.title}
+                  </h3>
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-gray-400 py-20">
+                No games found. Seed the database to see content.
               </div>
-            </Link>
-          ))
-        ) : (
-          <div className="col-span-full text-center text-slate-500 py-10">
-            {/* This shows if database is empty or connection failed */}
-            <p>No games found. Click the [DEV] Seed button to add data.</p>
-          </div>
-        )}
+            )
+          )}
+        </div>
       </div>
     </div>
   );
