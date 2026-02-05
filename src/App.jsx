@@ -14,6 +14,7 @@ import Contact from "./pages/Contact";
 import Navbar from "./components/layout/Navbar";
 import Sidebar from "./components/layout/Sidebar";
 
+// 🔒 Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return null;
@@ -26,15 +27,15 @@ function App() {
 
   return (
     <BrowserRouter>
-      {/* Background matches the new cream theme */}
-      <div className="bg-[#FEFAE0] min-h-screen font-sans flex flex-col">
+      {/* Updated Background to Beige (#DDD0C8) and Text to Dark Grey (#323232) */}
+      <div className="bg-[#DDD0C8] min-h-screen font-sans flex flex-col text-[#323232]">
         
         <Navbar toggleSidebar={() => setIsSidebarOpen(true)} />
         <Sidebar isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
 
-        {/* 🔴 FIXED: Removed 'pt-24'. Sticky navbar handles spacing automatically. */}
         <div className="flex-grow"> 
           <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/contact" element={<Contact />} />
@@ -42,6 +43,7 @@ function App() {
             <Route path="/project/:slug" element={<ProjectDetails />} />
             <Route path="/login" element={<Login />} />
 
+            {/* Admin Protected Routes */}
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/admin/add" element={<ProtectedRoute><AddGame /></ProtectedRoute>} />
           </Routes>

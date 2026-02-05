@@ -1,18 +1,21 @@
-/* 1. Import Fonts MUST be first */
+/* 1. Import Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap');
 
-/* 2. Then Tailwind */
+/* 2. Tailwind Setup */
 @import "tailwindcss";
 
-/* 3. Then Theme Configuration */
+/* 3. Theme Definition */
 @theme {
   --font-display: "Spline Sans", sans-serif;
   
-  --color-primary: #819067;       /* Sage Green */
-  --color-secondary: #B1AB86;     /* Beige */
-  --color-contrast: #0A400C;      /* Deep Forest Green */
-  --color-bg-light: #FEFAE0;      /* Cream */
-  --color-surface-dark: #1a2c34;
+  /* Your Requested Palette */
+  --color-bg-light: #DDD0C8;      /* Main Beige Background */
+  --color-contrast: #323232;      /* Dark Grey Text & UI */
+  
+  /* Derived colors for depth */
+  --color-primary: #323232;       /* Buttons are Dark Grey */
+  --color-secondary: #5e5e5e;     /* Slightly lighter grey for secondary text */
+  --color-surface: #E8E2DC;       /* A slightly lighter beige for cards/inputs */
 }
 
 /* 4. Global Resets */
